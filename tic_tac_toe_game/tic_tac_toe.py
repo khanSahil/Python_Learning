@@ -3,10 +3,10 @@ def display_matrix(matrix):
     for row in matrix:
         print(row)
         
-def accept_matrix_input_location():
+def accept_matrix_input_location(player_name):
     user_input = [-1,-1]
-    user_input[0] = input("Please enter row value:")
-    user_input[1] = input("Please enter column value:")
+    user_input[0] = input(f"{player_name} Please enter row value:")
+    user_input[1] = input(f"{player_name} Please enter column value:")
     if validate_user_input(user_input) == True:
         return user_input
         
@@ -67,19 +67,24 @@ def are_anti_diagonal_values_same(matrix):
     # Check if all anti-diagonal elements are "O" or all "X"
     return set(anti_diagonal_elements) in [{"O"}, {"X"}]
 
-def check_winner(matrix, user_input):
+def is_matrix_full(matrix):
+    return all(all(cell in ("X", "O") for cell in row) for row in matrix)
+
+def check_winner(matrix, user_input, player_name):
     if are_row_values_same(matrix, int(user_input[0])):
-        print("Player wins by row match")
+        print(f"{player_name} Player wins by row match")
         return True
     if are_column_values_same(matrix, int(user_input[1])):
-        print("Player wins by column match")
+        print(f"{player_name} Player wins by column match")
         return True
     if are_main_diagonal_values_same(matrix):
-        print("Player wins by diagonal match")
+        print(f"{player_name} Player wins by diagonal match")
         return True
     if are_anti_diagonal_values_same(matrix):
-        print("Player wins by anti-diagonal match")
+        print(f"{player_name} Player wins by anti-diagonal match")
         return True
+    
+    return is_matrix_full(matrix)
 
 def ask_player_name():
     player1 = input("Enter first player's name: ")
@@ -117,11 +122,11 @@ def main():
     
     display_matrix(matrix)
     while(True):
-        user_input = accept_matrix_input_location()
+        user_input = accept_matrix_input_location(players[turn % 2])
         print(f"{players[turn % 2]} chose location {user_input[0]} {user_input[1]}")
-        matrix[int(user_input[0])][int(user_input[1])] = 'X' if player1_symbol == 'X' else 'O'
+        matrix[int(user_input[0])][int(user_input[1])] = player1_symbol if turn % 2 == 0 else player2_symbol
         display_matrix(matrix)
-        if check_winner(matrix, user_input) == True:
+        if check_winner(matrix, user_input,players[turn % 2]) == True:
             print("Game Over")
             break
         turn += 1
