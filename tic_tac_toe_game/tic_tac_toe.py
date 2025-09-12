@@ -28,43 +28,34 @@ def are_row_values_same(matrix, row_index):
     
     row = matrix[row_index]
     if not row:
-        return False  # empty row → not same
+        return False
 
-    # Check if all values are "O" or all "X"
     return set(row) in [{"O"}, {"X"}]
 
 def are_column_values_same(matrix, col_index):
     if not matrix or not matrix[0]:
-        return False  # empty matrix/column can't be O or X
+        return False
 
     try:
-        # Extract the column values
         column_values = [row[col_index] for row in matrix if len(row) > col_index]
     except IndexError:
-        return False  # invalid column index
+        return False
 
-    # Check if all values are "O" or all "X"
     return set(column_values) in [{"O"}, {"X"}]
 
 def are_main_diagonal_values_same(matrix):
-    """Checks if all values in the main diagonal of a square 2D list are the same (only O or X)."""
     if not matrix or len(matrix) != len(matrix[0]):
-        return False  # Handle empty or non-square matrix
+        return False
 
     diagonal_elements = [matrix[i][i] for i in range(len(matrix))]
-
-    # Check if all diagonal elements are "O" or all "X"
     return set(diagonal_elements) in [{"O"}, {"X"}]
 
 def are_anti_diagonal_values_same(matrix):
-    """Checks if all values in the anti-diagonal of a square 2D list are the same (only O or X)."""
     if not matrix or len(matrix) != len(matrix[0]):
-        return False  # Handle empty or non-square matrix
+        return False
 
     n = len(matrix)
     anti_diagonal_elements = [matrix[i][n - 1 - i] for i in range(n)]
-
-    # Check if all anti-diagonal elements are "O" or all "X"
     return set(anti_diagonal_elements) in [{"O"}, {"X"}]
 
 def is_matrix_full(matrix):
@@ -74,17 +65,18 @@ def check_winner(matrix, user_input, player_name):
     if are_row_values_same(matrix, int(user_input[0])):
         print(f"{player_name} Player wins by row match")
         return True
+    
     if are_column_values_same(matrix, int(user_input[1])):
         print(f"{player_name} Player wins by column match")
         return True
+    
     if are_main_diagonal_values_same(matrix):
         print(f"{player_name} Player wins by diagonal match")
         return True
+    
     if are_anti_diagonal_values_same(matrix):
         print(f"{player_name} Player wins by anti-diagonal match")
         return True
-    
-    return is_matrix_full(matrix)
 
 def ask_player_name():
     player1 = input("Enter first player's name: ")
@@ -115,6 +107,7 @@ def main():
     players = [player_name[0], player_name[1]]
     print(f'Let\'s play TIC TAC TOE GAME ({player_name[0]} vs {player_name[1]})')
     player1_symbol = input(f'{player_name[0]} Please select between X and O: ')
+    
     if(player1_symbol.upper() == 'X'):
         player2_symbol = 'O'
     else:
@@ -126,7 +119,7 @@ def main():
         print(f"{players[turn % 2]} chose location {user_input[0]} {user_input[1]}")
         matrix[int(user_input[0])][int(user_input[1])] = player1_symbol if turn % 2 == 0 else player2_symbol
         display_matrix(matrix)
-        if check_winner(matrix, user_input,players[turn % 2]) == True:
+        if check_winner(matrix, user_input,players[turn % 2]) == True or is_matrix_full(matrix):
             print("Game Over")
             break
         turn += 1
