@@ -9,15 +9,15 @@ email = input("Enter your email: ")
 password = getpass.getpass("Enter your password: ")
 #print(smtp_object.login(email, password))
 
-#from_address = email
-#to_address = email
-#subject = input("Enter the subject line: ")
-#message = input("Enter your message: ")
+from_address = email
+to_address = email
+subject = input("Enter the subject line: ")
+message = input("Enter your message: ")
 
-#msg = "Subject: "+subject+'\n'+message
+msg = "Subject: "+subject+'\n'+message
 
-#smtp_object.sendmail(from_address, to_address, msg)
-#print("Email sent successfully!")
+smtp_object.sendmail(from_address, to_address, msg)
+print("Email sent successfully!")
 
 
 import imaplib
