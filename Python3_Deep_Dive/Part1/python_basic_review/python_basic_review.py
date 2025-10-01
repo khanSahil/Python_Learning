@@ -964,4 +964,34 @@ print(bool(''))
 """
 
 
-# BOOLEANS PRECEDENCE and SHORT-CIRCUITNG
+# BOOLEANS OPERATORS, PRECEDENCE and SHORT-CIRCUIT EVLUATION
+# not, and or
+
+# Top to bottom, order of precedence
+# ()
+# < > <= >= != == in is
+# not
+# and
+# or
+
+# Boolean Operators and Truth Values
+
+# Every object in Python has a truth value (truthiness)
+# So for any object, X and Y, we can also write.
+# bool(X) and bool(Y)
+# bool(X) or bool(Y)
+
+# In fact we can write as below:
+# X or Y
+# X and Y
+
+# But what will it return in python, A boolean? No
+
+# X or Y => If X is truthy, returns X, else return Y
+
+# If X is truthy, return X, otherwise, evaluate Y, and returns it.
+
+# Similarly for and operation
+# If X is false, return X, otherwise, evaluate Y, and returns it.
+
+print(bool(None))
