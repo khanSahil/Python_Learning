@@ -1,5 +1,5 @@
 
-
+"""
 a = [1, 2, 3]
 
 b = [1, 2,
@@ -540,14 +540,428 @@ print(a == b)
 # lists -> tuple when membership test happens
 # sets -> frozenset when membership test happens
 
+
+
 def my_func():
     a = 24 * 60
     b = (1, 2) * 5
-    c = 'abc' * 3
-    d = 'ab' * 11
-    e = 'the quick brown fox' *5
+    c = 'abc ' * 3
+    d = 'ab ' * 11
+    e = 'the quick brown fox ' *5
     f = ['a', 'b'] * 3
     
 my_func()
 
 print(my_func.__code__.co_consts)
+
+
+# In Python we have 5 main types of numbers:
+    # boolean
+    # int
+    # Rational
+    # Real
+    # Complex
+
+# Python works slightly differently. Depending upon the int value, 
+# it can use different number of bits, to store the value.
+# Which means, it could use, 4, 8, 12 and so on depending upon the
+# value it has to store.
+
+# Since integers are objects, there are fixed overhead per integer.
+# Theoretically only limited by the amount of memory available.
+
+
+import sys
+
+print(type(100))
+print(sys.getsizeof(0))
+print(sys.getsizeof(1))
+print(sys.getsizeof(9))
+print(sys.getsizeof(2**1000))
+print(2**1000)
+
+import time
+def calc(a):
+    for i in range(10000000):
+        a * 2
+    
+start = time.perf_counter()
+calc(2**1000000)
+end = time.perf_counter()
+print(end - start)
+
+
+# Integer Operations
+
+# int + int -> int
+# int - int -> int
+# int * int -> int
+# int ** int -> int
+# int / int -> float # will always return float
+print(5/2)
+print(10/2) # print out 5.0 instead of 5
+
+
+# int // int = int # floor division => floor(int / int)
+# int % int = int # modulo 
+print(5//2)
+print(5%2)
+
+import math
+print(math.floor(4.9))
+print(math.floor(4.1))
+print(math.floor(-3.1))
+print(math.floor(-3.9))
+
+
+# Integers Constructors and Numberical Bases
+# Int provides multiple constructors
+# 1) Only one parameter, like int(10), int(10.5), int(-5), int(True), int("10") etc
+# 2) With additional parameters called as base (default 10)
+#   int("1010",2) => 10, or int("1010", base=2) => 10
+#   int("A12F", base=16) => 41263 or int("a12f", base=16) => 41263
+#   int("534", base=8) => 348
+
+print(int(10))
+print(int(True))
+print(int("10"))
+print(int("1010", base=2))
+print(int("A12F", base=16))
+print(int("534", base=8))
+print(int("0xA", base=16))
+
+# Reverse process: Changing an integer from base 10 to another base
+# Built-in functions: for example: bin(), bin(10) => '0b1010'
+print(bin(10))
+print(oct(10))
+print(hex(10))
+
+a = 0b1010
+print(f"Value of a is {a}")
+b = 0o12
+print(f"Value of b is {b}")
+
+# What about other bases?
+# We need to write our own custome code for other bases.
+
+
+
+# The Fractional Class
+# Rational numbers can be represented in Python
+# using the Fraction classin the fractions module.
+
+from fractions import Fraction
+x = Fraction(3,4)
+y = Fraction(22,7)
+z = Fraction(6,10)  # Fractions are automatically reduced to 3/5
+print(x)
+print(y)
+print(z)
+
+# Below are the Fraction() constructors
+#   Fraction(numerator = 0, denominator = 1)
+#   Fraction(other_fraction)
+#   Fraction(float)
+#   Fraction(deciman)
+#   Fraction(string)
+
+# Standard arithmetic operations are supported.
+# +,-,*,/ and result will be in Fraction objects as well.
+
+x = Fraction(22,7)
+print(f'Numerator is: {x.numerator}')
+print(f'Denominator is: {x.denominator}')
+
+# Float objects have finite precision on any operating system
+# which means any float can be written as a fraction.
+
+import math
+x = Fraction(math.pi)
+print(x)
+x = Fraction(math.sqrt(2))
+print(x)
+
+# Constraining the denominator
+# Given a fraction object, we can find an approximate equivalent fraction
+# with a constrained denominator using limit_denominator(max_denominator = 1000000)
+# instance method to find the closest rational (which could be precisely equal), wtth
+# the denominator that doesn't exceed max_denominator.
+
+x = Fraction(math.pi)
+print(x)
+
+print(x.limit_denominator(10))
+print(x.limit_denominator(100))
+print(x.limit_denominator(1000))
+print(x.limit_denominator(10000))
+
+
+
+# The Float Class
+# The float class is Python's default implementation of
+# representing real numbers.
+
+# Floats uses fixed number of bytes (fixed width)
+#   8 bytes -> 64 Bits
+#   but Python objects have some overhead too -> 24 bytes
+
+x = 0.1 + 0.1 + 0.1
+y = 0.3
+print(x==y)
+
+# Using rounding won't fix the issue either.
+# But we can use to round the entirety of both sides of the
+# equality comprison
+
+print(round(x,5) == round(y,5))
+
+# math module has that solution for us
+# math.isclose(a, b, *, rel_tol=1e-09, abs_tol=0.0)
+# If you don't specify abs_tol, then it defaults to 0
+# instead of 0.0 and you will face problem.
+
+# Coercing a float to an Integer
+# THis means we will be loosing data.
+# Different ways to configure this data loss
+
+# truncation
+# floor
+# ceiling 
+# rounding
+
+# Data loss will happen in all of the above 4 methods
+
+# TRUNCATION:
+# Truncating a float simply return the integer portion of the float.
+# Basically it ignores everything after the decimal point
+
+import math
+print(math.trunc(10.4))
+print(math.trunc(-19.5))
+
+print(int(10.4)) # is same as saying trunc(10.4) in case don't want to use math.trunc()
+
+# FLOOR
+# The floor of a number is the largest integer less than (or equal to) the number.
+
+x = 10.7
+print(math.floor(x))
+x = 9.9
+print(math.floor(x))
+x = 9.1
+print(math.floor(x))
+
+x = -10.7
+print(math.floor(x))
+x = -9.9
+print(math.floor(x))
+x = -9.1
+print(math.floor(x))
+
+# CEILING
+# The floor of a number is the smalles integer greater than (or equal to) the number.
+
+
+x = 10.7
+print(math.ceil(x))
+x = 9.9
+print(math.ceil(x))
+x = 9.1
+print(math.ceil(x))
+
+x = -10.7
+print(math.ceil(x))
+x = -9.9
+print(math.ceil(x))
+x = -9.1
+print(math.ceil(x))
+
+# ROUNDING
+# Python has built in function round(x, n=0)
+# This will round the x to closes multiple of pow(10, -n)
+# this would work for positive n, but n, in fact could be negative as well
+# if n is not specified, then it defaults to zero, and round (x) will
+# therefor return an int
+
+# round(x) => int
+# round(x, n) => same type as x
+# round(x,0) => same as type x
+
+print(round(1.9))
+print(round(1.1))
+
+print(round(1.97492,10))
+print(round(1.108049,10))
+
+print(round(-1.9589348,-10))
+print(round(-1.18483, -10))
+
+# TIES
+print(round(1.25, 1))
+print(round(2.35, 1))
+print(round(3.5, 1))
+print(round(4.5, 1))
+print(round(5.5, 1))
+
+
+# THE COMPLEX NUMBERS
+
+#Constructor will have x component and y component
+#complex(x,y) x -> real part, y -> imaginary part (x + yj)
+
+#Example a = complex(1, 2)
+#        b = 1 + 2j
+#       
+#        here a == b => True
+# x and y are actually stored as floats. So we need to be carefull
+# with the equality testing.
+
+# Some instance properties and methods
+# .real           => returns the real part
+# .imag           => returns the imaginary part
+# .conjugate()    => returns the complex conjugate
+
+# d = 2-3j
+# d.real => 2
+# d.imag => -3
+# d.conjugate = 2+3j
+
+# The standard Arithmetic operators (+, -, / , * , **) works as expcted
+# with complex numbers.
+
+# Example: (1 + 2j) + (3 + 4j) = 4 +6j
+
+# Real and complex numbers can be mixed as well.
+# Example: (1+2j) + 5 = 6 + 2j
+# Example: (1+2j) * 4 = 4 + 8j
+
+# == and != are supported, but we have the same problem as that with float.
+# We use cmath module for complex math operations on complex numbers.
+
+
+## // AND % OPERATORS ARE NOT SUPPORTED
+## <, >, <=, >= ARE ALSO NOT SUPPORTED
+## functions in math module ALSO NOT SUPPORTED.
+
+#Rectangular to Polar
+
+import cmath
+x = 1+1j
+print(cmath.phase(x))   # returns the argument phase of the complex number x
+print(abs(x))
+
+# Polar to Rectangular
+y = cmath.rect(abs(x),cmath.phase(x))
+print(y) # this gives (1.0000000000000002+1j)
+
+# BOOLEANS
+# Python has concrete bool class that is used to represent Boolean values.
+# However, the bool class is a subclass of the int class.
+# This means, it posses all the properties and methods of integers, and add
+# some specialized one such as and, or etc
+
+print(issubclass(bool, int))
+print(issubclass(int, bool))
+
+# Two constants are defined in Python, True and False
+print(isinstance(True, bool))
+print(isinstance(False, bool))
+print(isinstance(True, int))
+
+# Booleans True and False are singleton objects of type bool.
+# is and ==, since True and False are singleton objects, hence
+# they will always retain their memory address throughout the 
+# lifetime of your application.
+
+# So, comparisons of any Boolean expression to True or False can be
+# performed either the is(identity) operator, or == (equality) operator.
+
+# a == True and a is True, both will work.
+
+# Since bool objects are also int objects, hence they can be interpreted as
+# the integers 1 and 0.
+print(int(True))
+print(int(False))
+
+# However, True and 1 are not the same objects.
+print(id(True) != id(1))
+
+# Booleans as Integers
+# This can lead to strange, behavior you may not expected.
+# True > False
+print(True > False)
+print((1==2) == False)
+print((1==2) == 0)
+
+# Any interger arithmetic operations will also work with booleans
+print(True+True+True)
+print(-True)
+print(100 * -True)
+print(-True * -1)
+print(-True == -1)
+print(-False * 100)
+
+# The Boolean constructor
+# The boolean constructor bool(x), will return True, when x is True
+# and False, when x is False
+
+# What really happens is that many classes contain a definition of 
+# how to cast instances of themselves to a Boolean
+# Every class in python defines its truth value, that means a class will
+# say if I am in this state, I am in Truth state else not. This is sometimes
+# called as a truth value or truthyness of an object.
+
+# Integers have a truth value defined according to this rule:
+#     bool(0) -> False
+#     bool(x) -> True, for any int x != 0
+
+print(bool(1))
+print(bool(0))
+print(bool(-1))
+
+# Objects have Truth Values
+# All objects in Python has an associated truth value.
+# We saw this with integers above.
+# But this works the same for any objects.
+
+# Rules are straightforward:
+#    Every object by default has a True truth value, except:
+#         None
+#         False
+#         0 in any numberic type(0, 0.0, 0+0j)
+#         empty sequence (list, tuples, strings, ..)
+#         empty mapping types
+#         custome classes that implements __bool__ , __len__ methods that return False   
+
+# under the hood
+
+# Classes define their truth value by defining a special instance method:
+#     __bool__(self) or __len__
+#     
+#     then when we call bool(x), where x is an instance of any class, python
+#     will execute x.__bool__() method, or __len__, if __bool__ is not defined.
+#     If __len__or __bool__ also not defined, then it return by default True.
+
+#Example: Integers:
+#    def __boo__(self):
+#        return self != 0
+    
+# bool(100), python actually executes, 100.__bool__() and therefor returns
+# the result of 100 != 0
+
+print(bool([1,2,3]))
+print(bool([]))
+print(bool(None))
+
+#     if my_list:
+#         # code block
+#     
+#     if my_list is not None and len(my_list) > 0:
+#         code block
+
+print(bool('abc'))
+print(bool(''))
+"""
+
+
+# BOOLEANS PRECEDENCE and SHORT-CIRCUITNG
