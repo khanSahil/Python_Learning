@@ -1,5 +1,4 @@
 
-"""
 a = [1, 2, 3]
 
 b = [1, 2,
@@ -961,7 +960,7 @@ print(bool(None))
 
 print(bool('abc'))
 print(bool(''))
-"""
+
 
 
 # BOOLEANS OPERATORS, PRECEDENCE and SHORT-CIRCUIT EVLUATION
