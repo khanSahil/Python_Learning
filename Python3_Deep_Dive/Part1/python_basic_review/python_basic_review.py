@@ -994,3 +994,335 @@ print(bool(''))
 # If X is false, return X, otherwise, evaluate Y, and returns it.
 
 print(bool(None))
+
+
+# FUNCTION PARAMETERS
+#   Arguments vs Parameters
+#   Positional vs Keyword-Only Arguments
+#   Optional Arguments via Defaults
+#   Unpacking Iterables and Function Arguments
+#   Extended Unpacking
+#   Variable Number of Positional and Keyword-Only Arguments
+
+def my_func(a, b): # a and b a parameters of my_func and local to my_func
+    print(a*b)
+    
+x = 10
+y = 'ab'
+my_func(x, y)   # here x and y are the arguments of my_func.
+                # Also note that x and y are passed as a reference.
+                # Which means the memory addresses of x and y are passed.
+
+# Module Scope:
+#     a and x points to same memory reference.
+#     b and y points to same memory reference.
+
+# positional and Key word arguments
+
+# Most common way of assigning arguments to parameters:
+#   via the order in which they are passed. i.e. their postion.
+
+def my_func(a, b):
+    pass
+
+# A positional arguments can be made optional by specifying a degault value for the
+# corresponding parameter.
+
+def my_func(a, b=10):
+    pass
+
+# we can certainly call this function as my_func(10, 20) or my_func(5)
+# now suppose we have three agruments and want to make one of them as optional.
+
+# def my_func(a, b = 100, c):
+#     pass
+
+# How can we call this function without specifying the second parameter?
+# Even the definition of above funtion is incorrect.
+
+# The correct way of doing this is below:
+    # If a positional parameter is defined with a default value, every positional
+    # parameter after it must also be given a default value. So the correct way is
+    # below
+
+def my_func(a, b = 5, c = 10):
+    pass
+
+# we can call above function as my_func(1), my_func(1,2), my_func(1,2,3)
+# Not if we don't want tp provide the value to second argument, then how?
+# So we need to specify only a and c. Below is the way:
+
+# Keyword Argument is the way of doing it.
+# my_func(a = 1, c = 2)
+# my_func(1, c = 2)
+# This works even if the arguments doesn't have the default value.
+
+def my_func(a, b, c):
+    print(a, b, c)
+
+my_func(a = 1, b = 2, c = 3)
+my_func(1, 2, c = 3)
+my_func(1,2,3)
+my_func(b = 1, a = 3, c = 2)
+
+# If you have a name argument, all arguments thereafter must be a named too.
+# my_func(c = 1, 2, 4) # won't work
+# my_func(2, b = 2, 4) # won't work
+
+# my_func(1, b = 2, c = 4) # will work
+# my_func(1, c = 4, b = 2) # will work
+
+
+
+# UNPACKING ITERABLES
+#A side note on tuple, 
+
+#(1,2,3) is a tuple, but what defines a tuple in python?
+#is it (), no, its 1,2,3. Which means
+
+#1, 2, 3 is also a tuple. In fact () is just to make tuple clearer.
+
+#(1) is not a tuple, its just an integer
+# (1,) or 1, is a tuple
+# The only exception is when creating an empty tuple. () or tuple()
+
+# Packed Values
+# Packed values refers to values that are packed together in some way.
+# Tuples list, string, set and dict are obviuos. (1,2,3) or [1, 2, 4], 'hello' etc
+
+# So any iterable is considered as a packed value.
+
+# Unpacking packed values
+# Unpacking is an act of splitting packed valuess into individualvariables
+# contained in a list or tuple.
+
+a, b, c = [1, 2, 3] # need three variables to unpack
+print(a, b, c)
+# This unpacking is based on the relative position of each element.
+
+a,b,c = 10,20,'hello'
+print(a, b, c)
+
+a,b,c = 'XYZ'
+print(a, b, c)
+
+# We can use both shown below in Pytho:
+a = 10
+b = 20
+print(a, b)
+
+a , b = 11, 12
+print(a, b)  
+
+# Unpacking works with any iterable type:
+
+for e in 15, 25, 'hello':
+    print(e)
+
+a, b = b, a # swapping values
+print(a,b)
+
+d = {"key1":1, "Key2":2, "Key3":3}
+for k,v in d.items():
+    print (k, v)
+
+# EXTENDED UNPACKING (This use case for *)
+# We don't always want to unpack every single item in an iterable
+# We may, for example, want to unpack the first value, and then 
+# unpack the remaining values into another variable
+
+l = [1,2,3, 4]
+
+#we can achieve this using slicing
+a = l[0]
+b = l[1:]
+print(a,b)
+
+#or simple unpacking
+a, b = l[0], l[1:]
+print(a,b)
+
+#or we can use * operator
+a, *b = l
+print(a,b)
+
+# another * example
+a,b,*c = l
+print(a,b,c)
+
+a,*b, c = l
+print(a,b,c)
+
+a,*b, c, d = 'python'
+print(a,b,c,d)
+
+#a, *b, *c = 'python' # this won't work.
+
+# Till now we have seen, the * operator being used in the LSH
+# however, we can use the * operator in RHS as well, like below:
+
+l1 = [1,2,3]
+l2 = [4,5,6]
+l3 = [*l1,*l2]
+print(l3)
+
+l1 = [1,2,3]
+l2 = 'hello'
+l3 = [*l1,*l2]
+print(l3)
+
+# SETS and DICTIONARIES have no ordering, so above is not the way to
+# unpack data for sets or dict.
+
+# Usage with unordered types in a situation where you might want to create single collection
+# containing all the items of multiple sets, or all the keys of multiple dictionaries
+
+d1 = {'p':1,'y':2}
+d2 = {'t':3,'h':4}
+d3 = {'h':5, 'o':6,'n':7}
+
+l = [*d1, *d2, *d3]
+print(l)
+l = {*d1, *d2, *d3}
+print(l)
+
+## ** Unpacking operator
+
+# When working with dictionaries we saw that * essentially iterated the keys
+# We might ask the question:  can we unpack the key-value pairs of the dictionary?
+# The answer is YES
+
+d1 = {'p':1,'y':2}
+d2 = {'t':3,'h':4}
+d3 = {'h':5, 'o':6,'n':7}
+d = {**d1, **d2, **d3}
+print(d)
+
+d1 = {'a':1,'b':2}
+t = {'a':10, 'c':3, **d1}
+print(t)
+t = {**d1,'a':10, 'c':3}
+print(t)
+
+# NESTED UNPACKING
+l = [1, 2, [3, 4]]  # here third element is list itself
+# we can certainly unpack it in this way: a, b, c = l
+
+a,b,c=l
+d,e = c
+print(a,b,d,e)
+
+a,b,(c,d) = l
+print(a,b,c,d)
+
+a,*b,(c,d,e) = [1,2,3,'XYZ']
+print(a,b,c,d,e)
+
+# Earlier we said * operator can only be used once in the lHS of an
+# unpacking assignment.
+
+a,*b,(c,*d) = [1,2,3,'python']
+print(a,b,c,d)
+
+
+
+#*ARGS
+#With using *args we can pass on any number of arguments.
+
+def func1(a, b , *c):
+    d,e,f = c
+    print(a, b, d, e, f)
+
+func1(1,3, 'a','b','c')
+
+# The * parameter name is arbitrary - you can make it whatever you want.
+# It is customary but not required to name it as *args.
+
+def func1(a, b , *args):
+    d,e,f = args
+    print(a, b, d, e, f)
+
+func1(1,3, 'x','y','z')
+
+# *args exhaust the positional argument. You cannot add more positional arguments
+# after *args
+
+def func2(a,b,*args,d): # this is ok if we write function in this way
+    pass
+
+# this will throw error TypeError: func2() missing 1 required keyword-only argument: 'd'
+#func2(10,20,'a','b',100)  # func5() is the solution of this
+
+# Unpacking arguments
+def func3(a,b,c):
+    print(a,b,c)
+
+l = [10,20,30] # if we pass this list in the func3(), it will error out as it expects three
+# arguments. However, if we unpack it into three values, then it will work.
+
+# func3(l) # error out
+func3(*l) # will work
+
+# KEYWORD ARGUMENT
+
+# Recall that positional parameters can, optionally be passed as named (keyword) arguments.
+def func4(a,b,c):
+    pass
+
+func4(1,2,3)
+func4(a=1,b=2,c=3)
+
+# Mandatory Keyword Arguments
+# We can make keyword arguments mandatory
+# To do so, we create parameters after the positional parameters have been exhausted.
+
+def func5(a, b, *args, d):
+    print(a,b,args,d)
+
+func5(1,2,'a','b','c', d = 10.5)
+
+# We can omit any mandatory positional arguments as well.
+def func6(*args, d):
+    print(args,d)
+
+func6(d = 10)
+func6(1,2,3,d = 100)
+
+# In fact we can even enforce no positional arguments at all
+def func7(*,d): #* indicates end of positional argument
+    print(d)
+
+# func7(1,2,3, d = 5) # Error : func7() takes 0 positional arguments but 3 positional arguments 
+# (and 1 keyword-only argument) were given
+
+func7(d = 100)
+
+
+# *KWARGS (Keyword Arguments)
+
+# *args - is used to scoop up the remaining variable amount of POSITIONAL arguments 
+# The variable name args is arbitrary, * is the real performer here
+# The values are stored in tuple.
+
+# **kwargs - is used to scoop up a variable amount of remaining KEYWORD arguments
+# The variable name kwargs is arbitrary, ** is the real performer here
+# the values are stored in dictionary
+# No parameters comes after **kwargs
+
+def func1(*, d, **kwargs):
+    print(d, kwargs)
+
+func1(d = 1, a = 2, b = 4)
+func1(d = 10)
+    
+def func2(**kwargs):
+    print(kwargs)
+
+func2(a = 1, b = 2, C = 4)
+
+def func3(*args, **kwargs):
+    print(args, kwargs)
+
+func3(1, 2, a = 10, b = 20)
+
+func3()
