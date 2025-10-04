@@ -1326,3 +1326,458 @@ def func3(*args, **kwargs):
 func3(1, 2, a = 10, b = 20)
 
 func3()
+
+
+# First class functions
+
+# What is meant by first class object?
+# It can be passed as an argument to another function.
+# It can be returned from a function.
+# It can be assigned to a variable.
+# It can be stored in data structures such as list, tuple, dict etc.
+# Types such as int, float, str, list, dict, set, tuple etc are all
+# first class objects.
+
+# In-fact FUNCTIONS are also first class objects in Python.
+
+# What are HIGHER ORDER functions?
+# They take functions as arguments
+# Return a function as a result.
+
+# WHAT ALL WE WILL COVER
+#   Function annotation and documentation
+#   lambda expressions and anonymous functions
+#   collables
+#   function introspection
+#   built-in higher order functions(sorted, map, filter)
+#   some function in the functool module (reduce , all, any)
+#   partials
+
+# FUNCTOIN DOCSTRINGS AND ANNOTATIONS
+
+# We can use help(x) function before, that returns some documentation if available
+# for x.
+# We can document our functions (modules, classes, etc) to achieve the same result
+# using docstring.
+# If the first line in the function body is a string,( not an assignment, not a 
+# comment, just a string by itself), it will be interpreted as a docstring.
+
+# Example:
+
+def my_func(a):
+"""
+        # Documentation of my_func
+        # It accepts one argument 
+        # and returns nothing
+"""
+    return a+2
+
+# Now if you call help(my_func) it will return above docstring.
+# Multi-line docstrings are achieved used 
+
+# print(help(my_func))
+
+# So where are docstrings stored, since they are part of your code?
+# The docstrings are stored in the function's __doc__ property.
+
+# If we see the my_func.__doc__ then it will show the docstrings.
+# help() function also does the same thing, it will go and check for
+# __doc__ if it is defined.
+print(my_func.__doc__)
+
+# FUNCTION ANNOTATIONS
+# We have another way of adding documentation to our functions.
+
+def my_func(a: "a string", b: 'a positive integer') -> 'a string':
+    return a * b
+
+print(my_func('hello ', 4))
+# help(my_func)
+print(my_func.__doc__) # prints None
+
+# How do we use *args and **kwargs with annotations
+
+def  my_func(a:str = 'xyz', *args: 'additional parameters',
+             b: int=1, **kwargs: 'additional keyword only params')->str:
+    pass
+
+def my_func(a: 'info on a', b:int)->float:
+    pass
+# Where are annotations stored?
+# In the __annotations__ property of the function.
+# dictionary:
+#    Keys are the parameters names
+#    for return annotation, the key is return by default
+#    values are the annotaions.
+    
+print(my_func.__annotations__)
+{'a': 'info on a', 'b': <class 'int'>, 'return': <class 'float'>}
+
+# Where does Python uses Docstrings and Annotations?
+# It doesn't really
+# Mainly used by external tools and modules
+# Example: Applications that generate documentations from your code (Sphinx)
+
+# We do have an enhanced version of annotations called as type hint.
+
+# LAMBDA EXPRESSIONS?
+
+# So what are lambda expressions?
+# We already know how to create a function in python using def statement.
+# Lambda expressions are simply another way to create functions.
+# They are also called as anonymous functions.
+
+#Syntax:
+#    lambda [parameter list (optional)]: expressios
+
+# The whole above expression is just returning a function object.
+# that evaluated and returns the expression when it is called.
+# It can be assigned to a variable, or passed as an argument ot a function
+
+# Example:
+
+my_func = lambda x: x ** 2
+print(my_func(3))
+my_func = lambda x,y: x+y
+print(my_func(3,7))
+my_func = lambda : "hello"
+print(my_func())
+my_func = lambda s: s[::-1].upper()
+print(my_func("Hello World"))
+print(type(my_func))
+print(type(lambda x: x**2)) # will five function
+
+# Note that these expressions are function objects, but are not named.
+# Hence, they are called as anonymous functions.
+
+
+# LAMBDA or ANONYMOUS FUNCTIONS ARE NOT EQUIVALENT TO CLOSURES
+
+# Passing lambdas as a argument to a function
+
+def apply_func(x, fn):
+    return fn(x)
+
+print(apply_func(3, lambda x: x**2))
+
+# Limitations of lambda:
+#     The body of lambda is limited to single expressions
+#     no assignemnts
+#     no annotations
+
+
+
+# FUNCTION INTROSPECT
+# Function are first class objects, which means they have attributes.
+#    __doc__
+#    __annotations__
+
+# We can attach our own attributes, just like below:
+def my_func(a,b,**kwargs):
+    return a+b
+
+my_func.category = 'math'
+my_func.subcategory = "arithmetic"
+
+print(my_func.category)
+print(my_func.subcategory)
+
+# The dir() method is a built in function that, given an object as an argument
+# will return a list of valid attributtes for that object
+
+print(dir(my_func))
+print(my_func.__code__.co_varnames)
+print(my_func.__code__.co_argcount) # notice this returns on 2, as *args and **kwargs is not considered.
+
+
+#The easier way to use INSPECT module.
+import inspect
+import math
+#print(ismethod(my_func))
+#print(isfunction(my_func))
+#print(isroutine(my_func))
+
+# CODE INTROSPECTION
+# You can recover the source code of our functions and methods.
+
+print(inspect.getsource(my_func))
+
+# We can also find out which module the function was created
+print(inspect.getmodule(my_func)) # returns the path of the py file.
+print(inspect.getmodule(print)) # returns the path of the py file.
+print(inspect.getmodule(math.sin)) # returns the path of the py file.
+
+# Function comments
+# A good way to list all the code that needs some modification and 
+# has been marked as todo in the comment for later update.
+
+# setting up the variable
+a = 1
+# TODO: Implement this function later on
+# some additional notes
+def my_func(a, b = 1):
+    # comment inside the function
+    pass
+
+print(inspect.getcomments(my_func))
+# This will only show comments just preceeding the def line.
+# Also it doesn't print any comment not immediate preceeding
+# or comments inside the functions.
+
+# This is a good way to make sure there is no code that needs
+# implementation or update which has been missed.
+
+## CALLABLES ##
+
+# Any object that can be called using the () operator.
+# Callable will always return a value, at times it could be None
+# For example, functions and methods, but it goes beyond these two.
+
+# Many objects in Python are callable which are not methods or functions.
+# To see if an object is callable or not, we can use the in-built function callable.
+
+print(callable(print))
+print(callable('abc'.upper))
+print(callable(callable))
+print(callable(0))
+
+# Different types of callable:
+#     built-in functions      print len
+#     built-in methods        upper, append
+#     user-defined function   created using def or lambda expressions
+#     methods                 functions bound to a class or object
+#     classes                 MyClass(x,y,z):
+#                                 it will call __new__ method.
+#                                 it will call __init__ method
+#                                 then returns the object
+#     class instances         if the class implements __call__ method
+#     generators
+#     coroutines
+#     async generators.
+
+from decimal import Decimal
+print(callable(Decimal))
+print(callable(Decimal('3.14')))
+
+
+
+# MAP, FILTER AND ZIP
+# Higher Order functions
+# A function that takes a function as a parameter and/or returns a function as a return value.
+
+# Exmple:
+#     Sorted
+#     map
+#     filter
+
+## The MAP function
+
+#map(func, *iterables)
+# iterables =  a variable number of iterables
+#func       =  some function that takes as many arguments as there are iterable
+#              objects passed to iterables.
+
+# map(func,*iterables) will return an iterator that calculates the function applied\
+# to each element of the iterables
+
+# The iterator stops as soon as one of the iterables has been exhausted
+# so unequal length iterables can be supplied.
+
+l = [1,2,3]
+def sq(x):
+    return x**2
+
+print(list(map(sq, l)))
+
+
+l1 = [9,8,7,6,5,4]
+l2 = [10,20,30]
+
+def add_two_num(x,y):
+    return x + y
+
+print(list(map(add_two_num,l1,l2)))
+
+# using lambdas
+print(list(map(lambda x,y : x - y,l1,l2)))
+
+## FILTER FUNCTION
+
+# Now lets look at the filter function.
+# It takes single function and single iterable
+# filter helps us decide if we keep the element or throw out the element of the iterable
+# if function returns true, then the element is retained else thrwon out.
+
+# If the function is None, it returns the element of the iterable which are truthy
+
+l = [0,1,2,3,4] # here zero is falsy
+
+print(list(filter(None, l)))
+print(list(filter(lambda x: x % 2 == 0, l)))
+
+## ZIP FUNCTION
+
+# Now moving up to ZIP Function
+# It is very usefull, to be used with higher order functions, though 
+# zip is not as higher order function.
+
+#zip(*iterables)
+
+# 1,2,3,4
+# 10,20,30,40 --------> ZIP it, we will get tuple (1,10), (2,20),(3,30),(4,40)
+
+l1 = [1,2,3]
+l2 = [12,13,14,15]
+
+print(list(zip(l1, l2)))
+
+l1 = [1,2,3]
+l2 = [12,13,14,15]
+l3 = ['a','b','c','d']
+print(list(zip(l1, l2, l3))) # tuple of three elements each
+
+l1 = [1,2,3]
+l2 = [12,13,14,15]
+l3 = 'python'
+print(list(zip(l1, l2, l3))) # tuple of three elements each
+
+# List Comprehension alternatives to map
+
+print(list(filter(lambda x: x % 2 == 0,l2)))
+
+print([x for x in l2 if x % 2 == 0])
+#[<return expression> for <varname> in <iterable> if <conditionj>]
+
+# Reducing Functions in Python
+# There are functions that recombine an iterable recursively, ending up with a single
+# return values. Also called as accumulators, aggregators, or folding functions.
+
+# Example: Finding the maximum value in iterable
+# a0,a1,a2,.....an
+# The functool module
+
+from functools import reduce
+l = [5, 8, 6, 10, 9]
+print(reduce(lambda a,b  : a if a > b else b, l)) # returns max 10 value
+print(reduce(lambda a,b  : a if a < b else b, l)) # returns min 5 value
+print(reduce(lambda a,b  : a + b , l)) # returns total sum 38
+
+# reduce works on any iterable
+print(reduce(lambda a,b: a if a < b else b,{10,5,2,4})) # works on set also
+print(reduce(lambda a,b : a if a < b else b, 'python')) # returns h, lexographical ordering
+print(reduce(lambda a,b : a + ' ' + b,("Python", "is", "amazing")))
+
+# Built in reducing functions
+# Python provides several common reducing functions:
+#    min
+#    max 
+#    sum
+#    any # if any element in iterable is truthy
+#    all # if all the elements in iterable is truthy
+
+# common scenario is calculating the factorial
+print(reduce(lambda a,b: a * b,range(1,6))) # works on set also
+
+# calculating n!
+n=6
+print(reduce(lambda a,b: a * b,range(1,n+1)))
+
+# Reduce Initializer
+# The reduce function has a third (optional) parameter: initializer defualt to None.
+# If it is specified, it is essentially like adding it to the front of the iterable.
+# It is often used to provide some kind of default in case the iterable is empty.
+
+l = []
+#print(reduce(lambda x,y : x + y, l)) will produce runtime exception
+print(reduce(lambda x,y : x + y, l, 1))
+
+l = [1,2,3]
+print(reduce(lambda x,y : x + y, l, 0))
+
+
+
+# PARTIAL FUNCTIONS
+# To reduce function arguments.
+
+# Example:
+def my_func(a,b,c):
+    print(a,b,c)
+    
+# now is there a way that I can only pass two parameters to above function
+# may be a default value of a
+
+# we can do below:
+def fn(b,c):
+    return my_func(10,b,c)
+
+fn(20,30)
+
+f = lambda b,c : my_func(10,b,c)
+f(20,30)
+
+# We can also do it using partial functions available in functools
+
+from functools import partial
+
+f = partial(my_func,10)
+f(20,30)
+
+f = partial(my_func,10,29)
+f(40)
+
+# Handling more complex arguments
+def my_func(a,b,*args, k1, k2, **kwargs):
+    print(a, b, args, k1, k2, kwargs)
+    
+f = partial(my_func, 10, k1 = 'x') # 10 will be assigned to a, and x to k1
+
+# Handling more complex arguments
+
+def pow(base, exponent):
+    return base ** exponent
+
+print(pow(2,4))
+square = partial(pow, exponent = 2)
+cube = partial(pow, exponent = 3)
+
+print(square(8))
+print(cube(8))
+
+# The operator MODULE
+# Functional equibvalent to Operators
+# In the last lecture we wrote code like below:
+from functools import reduce
+l = [2,3,4]
+print(reduce(lambda a,b : a * b, l))
+
+# We used lambda expressions to create a functional version of * operator
+# This is something that happens quite often, so the operator module was created.
+
+# what all functions are available in operator module:
+#    Arithmetic function:
+#        add(a,b)
+#        mul(a,b)
+#        pow(a,b)
+#        mod(a,b)
+#        floordiv(a,b)
+#        neg(a).. and may more
+
+#   Cpmparison and Boolean operators:
+#        lt(a,b)
+#        gt(a,b)
+#        eq(a,b)
+#        le(a,b)
+#        ge(a,b)
+#        ne(a,b)
+
+#    Sequence and Mapping Operators:
+#        concat(s1,s2)
+#        contains(s, val)
+#        countOf(s, val)
+#        getitem(s, i)
+#        setitem(s, i, val)
+#        delitem(s, i)
+
+#    Item Getters
+#    Attribute getters
+#    Calling another callable
